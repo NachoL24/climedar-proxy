@@ -24,13 +24,17 @@ app.options('*', (req, res) => {
   res.sendStatus(204);
 });
 
-// Proxy dinámico SIN /api
+// Proxy dinámico para pasar el JWT
 app.use('/', createProxyMiddleware({
   target: 'http://vps-4708087-x.dattaweb.com:443',
   changeOrigin: true,
   secure: false,
   onProxyReq: (proxyReq, req, res) => {
-    proxyReq.setHeader('Origin', corsOptions.origin);
+    // Pasar el header Authorization con el JWT
+    const token = req.headers['authorization'];
+    if (token) {
+      proxyReq.setHeader('Authorization', token);
+    }
   },
   onProxyRes: (proxyRes, req, res) => {
     // Forzar encabezados CORS en todas las respuestas
@@ -43,7 +47,7 @@ app.use('/', createProxyMiddleware({
 
 // Inicializa el servidor en el puerto 3000
 app.listen(3000, () => {
-  console.log('Proxy dinámico sin /api escuchando en http://localhost:3000');
+  console.log('Proxy dinámico con JWT escuchando en http://localhost:3000');
 });
 
 module.exports = app;
