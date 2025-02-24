@@ -7,9 +7,7 @@ const app = express();
 
 // Lista de orígenes permitidos
 const allowedOrigins = [
-  'https://climedar-front.vercel.app',
-  'https://climedar-c7287.web.app',
-  'http://localhost:4200'
+  'https://climedar-front.vercel.app/'
 ];
 
 // Configuración CORS Dinámica
