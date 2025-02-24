@@ -33,35 +33,36 @@ app.options('*', (req, res) => {
   res.sendStatus(204);
 });
 
+app.use((req, res, next) => {
+  console.log('Middleware de ejemplo');
+  console.log('Petición:', req.method, req.url);
+  console.log('Headers:', req.headers);
+  //TODO: BORRAR CUANDO SE IMPLEMENTE EL JWT EN EL BACKEND
+  if (req.headers.authorization) {
+    console.log('JWT:', req.headers.authorization);
+    delete req.headers.authorization;
+    console.log('Headers modificados:', req.headers);
+  }
+  next();
+});
+
 // Proxy dinámico para pasar el JWT
 app.use('/', createProxyMiddleware({
   target: 'http://vps-4708087-x.dattaweb.com:443',
   changeOrigin: true,
   secure: false,
-  onProxyReq: (proxyReq, req, res) => {
-    console.log('Proxy dinámico con JWT');
-    // Loguear el método HTTP
-    console.log('Método HTTP:', req.method);
-    console.log('Body:', req.body);
-    // Loguear la URL solicitada por el cliente
-    console.log('URL solicitada por el cliente:', req.url);
-    // Pasar el header Authorization con el JWT
-    console.log('Headers recibidos del cliente:', req.headers);
-    const token = req.headers.Authorization;
-    console.log('JWT recibido del cliente:', token);
-    if (token) {
-      // proxyReq.setHeader('Authorization', token);
-      req.headers.Authorization = null
-      console.log('JWT enviado al servidor');
-    }
-  },
-  onProxyRes: (proxyRes, req, res) => {
+  on: {
+  proxyRes: (proxyRes, req, res) => {
     // Forzar encabezados CORS en todas las respuestas
+    console.log("Middleware de respuesta");
+    console.log('Headers:', proxyRes.headers);
+    console.log('Status:', proxyRes.statusCode);
+    console.log('Status Message:', proxyRes.statusMessage);
     proxyRes.headers['Access-Control-Allow-Origin'] = corsOptions.origin;
     proxyRes.headers['Access-Control-Allow-Methods'] = corsOptions.methods.join(',');
     proxyRes.headers['Access-Control-Allow-Headers'] = corsOptions.allowedHeaders.join(',');
     proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
-  }
+  }}
 }));
 
 // Inicializa el servidor en el puerto 3000
