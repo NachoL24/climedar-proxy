@@ -37,12 +37,12 @@ app.use((req, res, next) => {
   console.log('Middleware de ejemplo');
   console.log('Petición:', req.method, req.url);
   console.log('Headers:', req.headers);
-  //TODO: BORRAR CUANDO SE IMPLEMENTE EL JWT EN EL BACKEND
-  if (req.headers.authorization) {
-    console.log('JWT:', req.headers.authorization);
-    delete req.headers.authorization;
-    console.log('Headers modificados:', req.headers);
-  }
+  // //TODO: BORRAR CUANDO SE IMPLEMENTE EL JWT EN EL BACKEND
+  // if (req.headers.authorization) {
+  //   console.log('JWT:', req.headers.authorization);
+  //   delete req.headers.authorization;
+  //   console.log('Headers modificados:', req.headers);
+  // }
   next();
 });
 
