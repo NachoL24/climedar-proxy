@@ -30,19 +30,19 @@ app.use('/', createProxyMiddleware({
   changeOrigin: true,
   secure: false,
   onProxyReq: (proxyReq, req, res) => {
-    console.log('Proxy dinámico con JWT');
+    console.error('Proxy dinámico con JWT');
     // Loguear el método HTTP
-    console.log('Método HTTP:', req.method);
-    console.log('Body:', req.body);
+    console.error('Método HTTP:', req.method);
+    console.error('Body:', req.body);
     // Loguear la URL solicitada por el cliente
-    console.log('URL solicitada por el cliente:', req.url);
+    console.error('URL solicitada por el cliente:', req.url);
     // Pasar el header Authorization con el JWT
-    console.log('Headers recibidos del cliente:', req.headers);
+    console.error('Headers recibidos del cliente:', req.headers);
     const token = req.headers['authorization'] || req.headers['Authorization'];
-    console.log('JWT recibido del cliente:', token);
+    console.error('JWT recibido del cliente:', token);
     if (token) {
       proxyReq.setHeader('Authorization', token);
-      console.log('JWT enviado al servidor');
+      console.error('JWT enviado al servidor');
     }
   },
   onProxyRes: (proxyRes, req, res) => {
@@ -56,7 +56,7 @@ app.use('/', createProxyMiddleware({
 
 // Inicializa el servidor en el puerto 3000
 app.listen(3000, () => {
-  console.log('Proxy dinámico con JWT escuchando en http://localhost:3000');
+  console.error('Proxy dinámico con JWT escuchando en http://localhost:3000');
 });
 
 module.exports = app;
