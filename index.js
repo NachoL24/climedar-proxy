@@ -5,32 +5,15 @@ const morgan = require('morgan');
 
 const app = express();
 
-// Lista de orígenes permitidos
-const allowedOrigins = [
-  'https://climedar-front.vercel.app/'
-];
-
-// Configuración CORS Dinámica
+// Configuración CORS
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Permitir solicitudes sin origin (como Postman o servidores internos)
-    if (!origin) return callback(null, true);
-
-    // Verificar si el origen está en la lista de permitidos
-    if (allowedOrigins.includes(origin)) {
-      console.log('Origen permitido:', origin);
-      return callback(null, true);
-    } else {
-      console.log('Origen no permitido:', origin);
-      return callback(new Error('No permitido por CORS'));
-    }
-  },
+  origin: ['https://climedar-c7287.web.app', 'https://climedar-front.vercel.app', 'http://localhost:4200'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 };
 
-// Habilitar CORS con configuración dinámica
+// Habilitar CORS
 app.use(cors(corsOptions));
 
 // Custom Stream para Vercel
