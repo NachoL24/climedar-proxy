@@ -1,6 +1,7 @@
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const cors = require('cors');
+const morgan = require('morgan');
 
 const app = express();
 
@@ -14,6 +15,14 @@ const corsOptions = {
 
 // Habilitar CORS
 app.use(cors(corsOptions));
+
+// Custom Stream para Vercel
+const stream = {
+  write: (message) => process.stdout.write(message)
+};
+
+// Agregar morgan para logging HTTP detallado con el stream customizado
+app.use(morgan('combined', { stream }));
 
 // Responder a preflight requests (OPTIONS)
 app.options('*', (req, res) => {
@@ -30,19 +39,19 @@ app.use('/', createProxyMiddleware({
   changeOrigin: true,
   secure: false,
   onProxyReq: (proxyReq, req, res) => {
-    console.log('Proxy dinámico con JWT');
+    process.stdout.write('Proxy dinámico con JWT');
     // Loguear el método HTTP
-    console.log('Método HTTP:', req.method);
-    console.log('Body:', req.body);
+    process.stdout.write('Método HTTP:', req.method);
+    process.stdout.write('Body:', req.body);
     // Loguear la URL solicitada por el cliente
-    console.log('URL solicitada por el cliente:', req.url);
+    process.stdout.write('URL solicitada por el cliente:', req.url);
     // Pasar el header Authorization con el JWT
-    console.log('Headers recibidos del cliente:', req.headers);
+    process.stdout.write('Headers recibidos del cliente:', req.headers);
     const token = req.headers['authorization'] || req.headers['Authorization'];
-    console.log('JWT recibido del cliente:', token);
+    process.stdout.write('JWT recibido del cliente:', token);
     if (token) {
       proxyReq.setHeader('Authorization', token);
-      console.log('JWT enviado al servidor');
+      process.stdout.write('JWT enviado al servidor');
     }
   },
   onProxyRes: (proxyRes, req, res) => {
@@ -56,7 +65,7 @@ app.use('/', createProxyMiddleware({
 
 // Inicializa el servidor en el puerto 3000
 app.listen(3000, () => {
-  console.log('Proxy dinámico con JWT escuchando en http://localhost:3000');
+  process.stdout.write('Proxy dinámico con JWT escuchando en http://localhost:3000');
 });
 
 module.exports = app;
