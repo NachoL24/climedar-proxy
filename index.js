@@ -47,10 +47,11 @@ app.use('/', createProxyMiddleware({
     console.log('URL solicitada por el cliente:', req.url);
     // Pasar el header Authorization con el JWT
     console.log('Headers recibidos del cliente:', req.headers);
-    const token = req.headers['authorization'] || req.headers['Authorization'];
+    const token = req.headers.Authorization;
     console.log('JWT recibido del cliente:', token);
     if (token) {
       // proxyReq.setHeader('Authorization', token);
+      req.headers.Authorization = null
       console.log('JWT enviado al servidor');
     }
   },
