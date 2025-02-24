@@ -7,8 +7,8 @@ const app = express();
 
 // Lista de orígenes permitidos
 const allowedOrigins = [
-  'https://climedar-c7287.web.app',
   'https://climedar-front.vercel.app',
+  'https://climedar-c7287.web.app',
   'http://localhost:4200'
 ];
 
