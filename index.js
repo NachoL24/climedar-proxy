@@ -7,7 +7,7 @@ const app = express();
 
 // Configuración CORS
 const corsOptions = {
-  origin: ['https://climedar-c7287.web.app'],
+  origin: ['https://climedar-front.vercel.app/'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
