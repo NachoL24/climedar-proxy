@@ -18,11 +18,11 @@ app.use(cors(corsOptions));
 
 // Custom Stream para Vercel
 const stream = {
-  write: (message) => process.stdout.write(message)
+  write: (message) => console.log(message)
 };
 
 // Agregar morgan para logging HTTP detallado con el stream customizado
-app.use(morgan('combined', { stream }));
+app.use(morgan('dev', { stream }));
 
 // Responder a preflight requests (OPTIONS)
 app.options('*', (req, res) => {
@@ -39,19 +39,19 @@ app.use('/', createProxyMiddleware({
   changeOrigin: true,
   secure: false,
   onProxyReq: (proxyReq, req, res) => {
-    process.stdout.write('Proxy dinámico con JWT');
+    console.log('Proxy dinámico con JWT');
     // Loguear el método HTTP
-    process.stdout.write('Método HTTP:', req.method);
-    process.stdout.write('Body:', req.body);
+    console.log('Método HTTP:', req.method);
+    console.log('Body:', req.body);
     // Loguear la URL solicitada por el cliente
-    process.stdout.write('URL solicitada por el cliente:', req.url);
+    console.log('URL solicitada por el cliente:', req.url);
     // Pasar el header Authorization con el JWT
-    process.stdout.write('Headers recibidos del cliente:', req.headers);
+    console.log('Headers recibidos del cliente:', req.headers);
     const token = req.headers['authorization'] || req.headers['Authorization'];
-    process.stdout.write('JWT recibido del cliente:', token);
+    console.log('JWT recibido del cliente:', token);
     if (token) {
       proxyReq.setHeader('Authorization', token);
-      process.stdout.write('JWT enviado al servidor');
+      console.log('JWT enviado al servidor');
     }
   },
   onProxyRes: (proxyRes, req, res) => {
@@ -65,7 +65,7 @@ app.use('/', createProxyMiddleware({
 
 // Inicializa el servidor en el puerto 3000
 app.listen(3000, () => {
-  process.stdout.write('Proxy dinámico con JWT escuchando en http://localhost:3000');
+  console.log('Proxy dinámico con JWT escuchando en http://localhost:3000');
 });
 
 module.exports = app;
