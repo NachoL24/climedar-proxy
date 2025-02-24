@@ -50,7 +50,7 @@ app.use('/', createProxyMiddleware({
     const token = req.headers['authorization'] || req.headers['Authorization'];
     console.log('JWT recibido del cliente:', token);
     if (token) {
-      proxyReq.setHeader('Authorization', token);
+      // proxyReq.setHeader('Authorization', token);
       console.log('JWT enviado al servidor');
     }
   },
